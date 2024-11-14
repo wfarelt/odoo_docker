@@ -21,10 +21,13 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'security/groups.xml',
         'views/student_views.xml',
         'views/tutor_views.xml',
         'views/course_views.xml',
         'views/teacher_views.xml',
+        'views/assignment_views.xml',
+        'views/submission_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

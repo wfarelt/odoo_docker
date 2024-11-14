@@ -8,6 +8,7 @@
                     <field name="name"/>
                     <field name="contact_info"/>
                     <field name="course_ids"/>
+                    <field name="user_id"/>
                 </list>
             </field>
         </record>
@@ -22,6 +23,7 @@
                             <field name="name"/>
                             <field name="contact_info"/>
                             <field name="course_ids"/>
+                            <field name="user_id"/>
                         </group>
                     </sheet>
                 </form>
