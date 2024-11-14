@@ -25,6 +25,7 @@
                    <sheet>
                        <group>
                             <field name="student_id" readonly="1"/>
+                            <field name="teacher_id" readonly="1"/>
                             <field name="assignment_id"/>
                             <field name="submission_date"/>
                             <field name="file_url"/>

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+
 
 class Student(models.Model):
     _name = 'school.student'
@@ -44,7 +46,7 @@ class Course(models.Model):
 
     # Nombre del curso, por ejemplo, "Matemáticas I", Cantidad de alumnos, Profesor, etc.
     name = fields.Char(string='Name', required=True)
-    student_count = fields.Integer(string='Student Count')
+    student_count = fields.Integer(string='Student Count', default=20)
     teacher_id = fields.Many2one('school.teacher', string='Teacher', ondelete='set null')
     student_ids = fields.One2many('school.student', 'course_id', string='Students')
 
@@ -55,7 +57,7 @@ class Assignment(models.Model):
 
     name = fields.Char(string="Assignment Name", required=True)
     description = fields.Text(string="Description")
-    due_date = fields.Date(string="Due Date")
+    due_date = fields.Date(string="Due Date", default=fields.Date.today)
     course_id = fields.Many2one('school.course', string="Course", ondelete='set null')
     student_ids = fields.Many2many('school.student', 'course_id',string="Students")
     teacher_id = fields.Many2one('school.teacher', string="Teacher", related='course_id.teacher_id', store=True)
@@ -70,6 +72,7 @@ class Submission(models.Model):
     _description = 'Student Submission for Assignments'
 
     student_id = fields.Many2one('school.student', string="Student", readonly=True)
+    teacher_id = fields.Many2one('school.teacher', string="Teacher", related='assignment_id.teacher_id', readonly=True)
     assignment_id = fields.Many2one('school.assignment', string="Assignment")
     submission_date = fields.Datetime(string="Submission Date", default=fields.Datetime.now)
     file_url = fields.Char(string="File URL")
@@ -85,7 +88,7 @@ class Submission(models.Model):
         if student:
             vals['student_id'] = student.id
         else:
-            raise ValidationError("No está asociado a ningún estudiante.") # type: ignore
+            raise ValidationError("No está asociado a ningún estudiante.")
         return super(Submission, self).create(vals)
     
         
