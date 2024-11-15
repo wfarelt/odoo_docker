@@ -20,6 +20,27 @@ class Student(models.Model):
     
     user_id = fields.Many2one('res.users', string="Odoo User", help="Related Odoo user for student")
     
+    @api.model
+    def create(self, vals):
+        # Crear el estudiante
+        student = super(Student, self).create(vals)
+
+        # Crear el usuario en Odoo vinculado al estudiante sin grupos y con una contraseña predeterminada
+        user_vals = {
+            'name': student.name,
+            'login': student.name.lower().replace(" ", "") + "@school.com",  # Generar un email de ejemplo
+            'password': 'user123*',  # Contraseña predeterminada
+            'groups_id': [(6, 0, [self.env.ref('base.group_user').id])],
+        }
+        
+        # Crear el usuario
+        user = self.env['res.users'].sudo().create(user_vals)
+        
+        # Vincular el usuario creado con el estudiante
+        student.user_id = user.id
+        
+        return student
+    
 class Tutor(models.Model):
     _name = 'school.tutor'
     _description = 'Tutor'
